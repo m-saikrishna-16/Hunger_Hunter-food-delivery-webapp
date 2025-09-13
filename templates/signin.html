@@ -1,0 +1,153 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign In</title>
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: url("https://wallpaperaccess.com/full/488392.jpg") no-repeat center center fixed;
+      background-size: cover;
+      overflow: hidden;
+    }
+
+    .wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: rgba(39, 39, 39, 0.4);
+    }
+
+    .form-box {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+      width: 400px;
+      padding: 40px 30px;
+      color: #fff;
+    }
+
+    .form-box header {
+      font-size: 30px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .input-box {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .input-box input {
+      width: 100%;
+      padding: 12px 15px 12px 45px;
+      border: none;
+      border-radius: 30px;
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .input-box input::placeholder {
+      color: #fff;
+    }
+
+    .input-box i {
+      position: absolute;
+      top: 12px;
+      left: 15px;
+      color: #fff;
+    }
+
+    .submit {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 30px;
+      background: rgba(255, 255, 255, 0.7);
+      color: #000;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .submit:hover {
+      background: rgba(255, 255, 255, 0.5);
+      box-shadow: 1px 5px 7px 1px rgba(0, 0, 0, 0.2);
+    }
+
+    .bottom-text {
+      text-align: center;
+      margin-top: 15px;
+      color: #fff;
+      font-size: 14px;
+    }
+
+    .bottom-text a {
+      color: #f39c12;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .bottom-text a:hover {
+      text-decoration: underline;
+    }
+
+    .alert {
+      background-color: rgba(231, 76, 60, 0.8);
+      padding: 10px;
+      color: white;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wrapper">
+
+    <div class="form-box">
+      <header>Sign In</header>
+
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+
+      <form method="post" action="/signin/">
+        {% csrf_token %}
+        <div class="input-box">
+          <i class="fa fa-user"></i>
+          <input type="text" name="username" placeholder="Username" required>
+        </div>
+        <div class="input-box">
+          <i class="fa fa-lock"></i>
+          <input type="password" name="pass1" placeholder="Password" required>
+        </div>
+        <button type="submit" class="submit">Log In</button>
+      </form>
+
+      <div class="bottom-text">
+        Don't have an account? <a href="{% url 'signup' %}">Sign up</a>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Sign Up</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: url("https://wallpaperaccess.com/full/488392.jpg") no-repeat center center/cover;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .form-box {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(8px);
+      border-radius: 12px;
+      padding: 20px;
+      width: 360px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      color: #fff;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 15px;
+      color: #fff;
+    }
+
+    label {
+      font-size: 14px;
+      font-weight: 500;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 12px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      transition: 0.3s;
+    }
+
+    input:focus {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    ::placeholder {
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      color: #000;
+      background: rgba(255, 255, 255, 0.9);
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: rgba(255, 255, 255, 0.7);
+      box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    @media screen and (max-width: 400px) {
+      .form-box {
+        width: 90%;
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+      <strong>Message:</strong> {{ message }}
+      <span class="close" data-dismiss="alert" aria-label="Close">&times;</span>
+    </div>
+  {% endfor %}
+  <div class="form-box">
+    <h2>Sign Up</h2>
+    <form action="/signup/" method="post">
+      {% csrf_token %}
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" placeholder="Create A Username" required />
+
+      <label for="fname">First Name</label>
+      <input type="text" id="fname" name="fname" placeholder="Enter Your First Name" required />
+
+      <label for="lname">Last Name</label>
+      <input type="text" id="lname" name="lname" placeholder="Enter Your Last Name" required />
+
+      <!-- Add this part inside your form -->
+
+      <label for="mobile">Mobile Number</label>
+      <input type="tel" id="mobile" name="mobile" placeholder="Enter Your Mobile Number" required pattern="[0-9]{10}" title="Enter 10 digit mobile number" />
+
+
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" placeholder="Enter Your Email" required />
+
+      <label for="pass1">Password</label>
+      <input type="password" id="pass1" name="pass1" placeholder="Create Your Password" required />
+
+      <label for="pass2">Confirm Password</label>
+      <input type="password" id="pass2" name="pass2" placeholder="Confirm Your Password" required />
+
+      <button type="submit">Sign Up</button>
+    </form>
+    <div class="bottom-text">
+        I have an account? <a href="{% url 'signin' %}">Sign In</a>
+      </div>
+  </div>
+
+</body>
+</html>

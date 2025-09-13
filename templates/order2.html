@@ -1,0 +1,284 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Your Order</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Fonts and CSS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+    <!-- jQuery and Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+
+        .navbar {
+            background-color: black;
+            margin-bottom: 0;
+            border-radius: 0;
+        }
+
+        .navbar-header {
+            display: flex;
+            align-items: center;
+            padding: 5px;
+        }
+
+        .nav-logo {
+            height: 50px;
+            width: 50px;
+            margin-right: 10px;
+        }
+
+        .navbar-brand,
+        .navbar-nav > li > a {
+            color: white !important;
+        }
+
+        .order-container {
+            max-width: 900px;
+            margin: 60px auto;
+            background-color: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 0 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .order-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .order-table th, .order-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .order-table img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+        }
+
+        .no-image {
+            color: #999;
+        }
+
+        .total-price {
+            font-size: 1.3em;
+            font-weight: bold;
+            text-align: right;
+            margin-top: 20px;
+        }
+
+        .btn-primary, .btn-danger {
+            padding: 10px 15px;
+            font-size: 14px;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+            color: #fff;
+        }
+
+        .btn-danger:hover {
+            background-color: #bb2d3b;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 30px 0;
+            color: #888;
+            font-size: 1.2em;
+        }
+
+        @media (max-width: 768px) {
+            .order-container {
+                width: 90%;
+                padding: 15px;
+            }
+        }
+
+        {% comment %} Footer styles remain same {% endcomment %}
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <div class="nav-logo">
+                <img src="{% static 'images/Hungery-removebg-preview (1).png' %}" alt="Logo" width="50" height="50" />
+            </div>
+            <a class="navbar-brand" href="#">Hunger-Hunter</a>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="{% url 'food_item_list' %}"><i class="fa-solid fa-angles-left"></i> Back to Menu</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="/signout/"><i class="fa-solid fa-right-to-bracket"></i> SignOut</a></li>
+                {% else %}
+                    <li><a href="/signup/"><i class="fa-solid fa-user-plus"></i> SignUp</a></li>
+                    <li><a href="/signin/"><i class="fa-solid fa-right-to-bracket"></i> SignIn</a></li>
+                {% endif %}
+                <li><a href="{% url 'order' %}"><i class="fa-solid fa-cart-plus"></i> Cart</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Order Section -->
+<div class="order-container">
+    <h1 class="text-center">Your Order</h1>
+
+    {% if order_items %}
+        <table class="order-table">
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Item</th>
+                    <th>Quantity</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in order_items %}
+                <tr>
+                    <td>
+                        {% if item.item.image %}
+                            <img src="{{ item.item.image.url }}" alt="{{ item.item.name }}">
+                        {% else %}
+                            <p class="no-image">No image</p>
+                        {% endif %}
+                    </td>
+                    <td>{{ item.item.name }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>
+                        <a href="{% url 'delete_from_cart' item.id %}" class="btn btn-danger">Remove</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="total-price">Total: ₹{{ total_price }}</div>
+
+        <form action="{% url 'place_order' %}" method="post" class="text-right mt-3">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">Place Order</button>
+        </form>
+    {% else %}
+        <div class="empty-cart">
+            <p>No items in your cart.</p>
+            <a href="{% url 'food_item_list' %}" class="btn btn-primary">Browse Menu</a>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Footer -->
+{% comment %} Reuse your existing footer below, unchanged {% endcomment %}
+<footer class="footer-section">
+    <!-- existing footer code remains unchanged -->
+    ...
+    <div class="container">
+        <div class="footer-cta pt-5 pb-5">
+          <div class="row">
+            <div class="col-xl-4 col-md-4 mb-30">
+              <div class="single-cta">
+                <i class="fas fa-map-marker-alt"></i>
+                <div class="cta-text">
+                  <h4>Find us</h4>
+                  <span>1010 Avenue, sw 54321, chandigarh</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-4 col-md-4 mb-30">
+              <div class="single-cta">
+                <i class="fas fa-phone"></i>
+                <div class="cta-text">
+                  <h4>Call us</h4>
+                  <span>9876543210 0</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-4 col-md-4 mb-30">
+              <div class="single-cta">
+                <i class="far fa-envelope-open"></i>
+                <div class="cta-text">
+                  <h4>Mail us</h4>
+                  <span>mail@info.com</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="footer-content pt-5 pb-5">
+          <div class="row">
+            <div class="col-xl-4 col-lg-4 mb-50">
+              <div class="footer-widget">
+                <div class="footer-logo">
+                  <a href="index.html"><img src="{% static 'images/Hungery-removebg-preview (1).png' %}" class="img-fluid" alt="logo" /></a>
+                </div>
+                <div class="footer-text">
+                  <p>Lorem ipsum dolor sit amet, consec tetur adipisicing elit, sed do eiusmod tempor incididuntut consec tetur adipisicing elit,Lorem ipsum dolor sit amet.</p>
+                </div>
+                <div class="footer-social-icon">
+                  <span>Follow us</span>
+                  <a href="#"><i class="fab fa-facebook-f facebook-bg"></i></a>
+                  <a href="#"><i class="fab fa-twitter twitter-bg"></i></a>
+                  <a href="#"><i class="fab fa-google-plus-g google-bg"></i></a>
+                </div>
+              </div>
+            </div>
+  
+            <div class="col-xl-4 col-lg-4 col-md-6 mb-50">
+              <div class="footer-widget">
+                <div class="footer-widget-heading">
+                  <h3>Subscribe</h3>
+                </div>
+                <div class="footer-text mb-25">
+                  <p>Don’t miss to subscribe to our new feeds, kindly fill the form below.</p>
+                </div>
+                <div class="subscribe-form">
+                  <form action="#">
+                    <input type="text" placeholder="Email Address" />
+                    <button><i class="fab fa-telegram-plane"></i></button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="copyright-area">
+        <div class="container">
+          <div class="row">
+            <div class="col-xl-6 col-lg-6 text-center text-lg-left">
+              <div class="copyright-text">
+                <p>
+                  Copyright &copy; 2024, All Right Reserved <a href="https://codepen.io/anupkumar92/">Anup</a>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+</footer>
+
+</body>
+</html>

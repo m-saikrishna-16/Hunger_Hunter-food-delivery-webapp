@@ -1,0 +1,4 @@
+<h2>Pay ₹{{ amount }} to {{ order.restaurant.name }}</h2>
+<p>UPI ID: {{ upi_id }}</p>
+<img src="https://api.qrserver.com/v1/create-qr-code/?data=upi://pay?pa={{ upi_id }}&pn={{ order.restaurant.name }}&am={{ amount }}&cu=INR&size=200x200" alt="QR Code">
+<p>After completing payment, your order will be processed.</p>
