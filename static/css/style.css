@@ -39,9 +39,9 @@ body {
   margin-right: 10px;
 }
 
-/* ✅ FIXED IMAGE PATH */
+/* ✅ FINAL FIXED IMAGE PATH */
 .logo {
-  background-image: url('../images/Hungry-removebg-preview.png');
+  background-image: url('../images/logo.png');
   background-size: cover;
   height: 50px;
   width: 50px;
